@@ -1,0 +1,18 @@
+
+ifdef HAVE_LIBMODBUS3
+
+L510_SRCS = hal/user_comps/l510_vfd/l510_vfd.c
+L510_CFLAGS = -DDEBUG $(LIBMODBUS_CFLAGS)
+L510_LIBS = $(LIBMODBUS_LIBS)
+
+$(call TOOBJSDEPS, $(L510_SRCS)) : EXTRAFLAGS += $(L510_CFLAGS)
+
+USERSRCS += $(L510_SRCS)
+../bin/l510_vfd: $(call TOOBJS, $(L510_SRCS)) ../lib/liblinuxcnchal.so.0 ../lib/liblinuxcncini.so.0
+	$(ECHO) Linking $(notdir $@)
+	$(Q)$(CC) $(LDFLAGS) -o $@ $^ $(L510_LIBS) 
+
+TARGETS += ../bin/l510_vfd
+
+endif # HAVE_LIBMODBUS3
+
